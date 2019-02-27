@@ -36,5 +36,8 @@ composer require jswei/dawn-api
 - 如果要使用生成文档 需要在public/static/ 下 安装hadmin
 ```
 cd /public/static/
-git clone  https://gitee.com/jswei/hadmin.git
+git clone  https://github.com/js-wei/hadmin.git
 ```
+## DEMO和例子
+[DEMO](https://gitee.com/jswei/Thinkphp_restful_api.git)
+[例子](http://api.jswei.cn/wiki)

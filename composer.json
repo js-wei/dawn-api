@@ -1,6 +1,6 @@
 {
     "name": "jswei/dawn-api",
-    "description": "A RESTful API package",
+    "description": "A RESTful API package for ThinkPHP5.1.*",
     "license": "Apache-2.0",
     "authors": [
         {
