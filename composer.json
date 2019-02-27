@@ -1,0 +1,19 @@
+{
+    "name": "jswei/dawn-api",
+    "description": "A RESTful API package",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "文化人干流氓事",
+            "email": "524314430@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DawnApi\\": "src/"
+        }
+    },
+    "require": {
+        "topthink/framework": "~5.0"
+    }
+}
