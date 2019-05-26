@@ -39,7 +39,7 @@ cd /public/static/
 git clone  https://github.com/js-wei/hadmin.git
 ```
 
-## v0.0.3版本
+## v0.0.4版本
  1. 修复ThinkPHP更新出现的BUG
  2. 生成文档API优化
 
