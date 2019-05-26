@@ -274,7 +274,8 @@ abstract class ApiController
             $fun = 'index';
         }
         if (isset($fun)) {
-            App::container()->invokeMethod([$this,$fun],Request::routeInfo()['var']);
+            App::instance()
+                ->invokeMethod([$this,$fun],Request::routeInfo()['var']);
         } else {
             // 抛出异常
             $msg = lang('error',[lang('method'),'']);
