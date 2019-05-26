@@ -168,6 +168,9 @@ abstract class Doc
         $restMethodList = self::_execExtraAction($className);
 
         foreach ($restMethodList as $method) {
+            if(strtolower($method) == 'jwt'){
+                continue;
+            }
             $rc = new \ReflectionClass($className);
 
             if (false == $rc->hasMethod($method)) continue;

@@ -70,7 +70,7 @@ git clone  https://github.com/js-wei/hadmin.git
    * @return 返回的数据类型,以一个空格隔开.形如:[数据类型 参数名称 备注说明]
    * 完成后的效果:
   
-   ![注解显示效果](http://api.jswei.cn/images/login.png)
+   ![注解显示效果](https://www.image.jswei.cn/dawn/login.png)
 
 3. 配合使用ThinkPHP5.1.*的注解路由更家灵活多变,上面的例子就用到了注解路由,更多有关于注解路由[请参考](https://www.kancloud.cn/manual/thinkphp5_1/469333)
 
@@ -87,26 +87,26 @@ git clone  https://github.com/js-wei/hadmin.git
  
  1. 进入项目目录后,输入`php ./think`可以查看可以使用的命令行,看到了`api`,就表示可以使用提供的命令行工具了,显示如图:
  
- ![命令行](http://api.jswei.cn/images/line01.png)
+ ![命令行](https://www.image.jswei.cn/dawn/line01.png)
  
  2. 使用命令`php ./think api -s first -c news`创建一个命名空间为`first`
  名称为`news`的控制器,运行命令后出现了`Success`就创建成功了.如图:
  
- ![wiki文档](http://api.jswei.cn/images/line02.png)
+ ![wiki文档](https://www.image.jswei.cn/dawn/line02.png)
  
  3. 命令执行成功后你会看到在项目中`application\first\controller`中多出了一个名为`News.php`的文件,这个就是为你生成的一些方法.
  
  4. 在生成控制器的同时还在配置文件`api_doc.php`生成了相应的文档的相关配置,如图:
  
- ![wiki文档](http://api.jswei.cn/images/line03.png)
+ ![wiki文档](https://www.image.jswei.cn/dawn/line03.png)
  
  5. 打开wiki这时就可以看见基本的相关api的文档说明,如图:
  
- ![wiki文档](http://api.jswei.cn/images/line04.png)
+ ![wiki文档](https://www.image.jswei.cn/dawn/line04.png)
  
  6. 这时候点击api地址可以测试是否成功(这里使用的是BaseAuth,浏览器提示登录窗口).如图:
  
- ![wiki文档](http://api.jswei.cn/images/line05.png)
+ ![wiki文档](https://www.image.jswei.cn/dawn/line05.png)
  
  > 需要注意的是因为开启了注解路由,创建成功之后最好执行路由生成工具,重新生成路由.
  
@@ -116,7 +116,7 @@ git clone  https://github.com/js-wei/hadmin.git
  
  1. 首先,你可以使用`php ./think api -h`查看帮助,您将得到的结果如下:
  
- ![wiki文档](http://api.jswei.cn/images/line06.png)
+ ![wiki文档](https://www.image.jswei.cn/dawn/line06.png)
  
  * -s or --namespace 生成的控制器的命名空间
  * -c or --controller 生成的控制器的名称
@@ -130,13 +130,13 @@ git clone  https://github.com/js-wei/hadmin.git
  
  运行成功后:
  
- ![wiki文档02](http://api.jswei.cn/images/line07.png)
+ ![wiki文档02](https://www.image.jswei.cn/dawn/line07.png)
  
- ![wiki文档03](http://api.jswei.cn/images/line08.png)
+ ![wiki文档03](https://www.image.jswei.cn/dawn/line08.png)
  
- ![wiki文档04](http://api.jswei.cn/images/line09.png)
+ ![wiki文档04](https://www.image.jswei.cn/dawn/line09.png)
  
- ![wiki文档04](http://api.jswei.cn/images/line10.png)
+ ![wiki文档04](https://www.image.jswei.cn/dawn/line10.png)
  
 ### 在线的例子
 
