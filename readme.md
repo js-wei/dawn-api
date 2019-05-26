@@ -39,6 +39,10 @@ cd /public/static/
 git clone  https://github.com/js-wei/hadmin.git
 ```
 
+## v0.0.3版本
+ 1. 修复ThinkPHP更新出现的BUG
+ 2. 生成文档API优化
+
 ## 功能增强
 
 ### 关于dawn-api更改的部分

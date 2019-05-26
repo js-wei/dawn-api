@@ -309,13 +309,14 @@ abstract class Doc
             $pos = stripos($comment, '@route');
             if ($pos !== false) {
                 $route = trim(substr($comment, $pos + 8));
-                $data['route'] = str_replace('\')','',$route);
+                $route = str_replace('\')','',$route);
+                $data['route'] = str_replace('\',\'',':',$route);
                 continue;
             }
             //接口param
             $pos = stripos($comment, '@param');
             if ($pos !== false) {
-                if(strstr($comment,'\think\Request')===false){
+                if(strstr($comment,'\think')===false){
                     $_param = trim(substr($comment, $pos + 6));
                     $_param = str_replace('$','',$_param);
                     $_param = explode(' ',$_param);
@@ -354,26 +355,32 @@ abstract class Doc
                             'require'=>isset($_param[3])?$_param[3]:'',
                             'default'=>isset($_param[4])?$_param[4]:''
                         ];
-                    }else{
-                        $method = isset($_param[3])?$_param[3]:'';
-                        if(!empty($method) && !self::chiness($method)){
-                            self::$method = $method;
-                        }
-                        self::$rules[self::$method][$_param[1]]=[
-                            'type'=>$_param[0],
-                            'name'=>$_param[1],
-                            'desc'=>$_param[2],
-                            'require'=>isset($_param[3])?$_param[3]:'',
-                            'default'=>isset($_param[4])?$_param[4]:'',
-                            'range'=>isset($_param[5])?$_param[5]:'',
-                        ];
                     }
+//                    {
+//                        $method = isset($_param[3])?$_param[3]:'';
+//                        if(!empty($method) && !self::chiness($method)){
+//                            self::$method = $method;
+//                        }
+//                        self::$rules[self::$method][$_param[1]]=[
+//                            'type'=>$_param[0],
+//                            'name'=>$_param[1],
+//                            'desc'=>$_param[2],
+//                            'require'=>isset($_param[3])?$_param[3]:'',
+//                            'default'=>isset($_param[4])?$_param[4]:'',
+//                            'range'=>isset($_param[5])?$_param[5]:'',
+//                        ];
+//                    }
                 }
                 continue;
             }
             //返回字段说明
             //@return注释
             $pos = stripos($comment, '@return');
+            if($pos !== false){
+                if(strstr($comment,'\think')!==false){
+                    continue;
+                }
+            }
             //以上都没有匹配到直接下一行
             if ($pos === false) {
                 continue;
