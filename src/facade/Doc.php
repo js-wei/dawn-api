@@ -358,6 +358,19 @@ abstract class Doc
                             'require'=>isset($_param[3])?$_param[3]:'',
                             'default'=>isset($_param[4])?$_param[4]:''
                         ];
+                    }elseif (count($_param)==6){
+                        $method = isset($_param[3])?$_param[3]:'';
+                        if(!empty($method) && !self::chiness($method)){
+                            self::$method = $method;
+                        }
+                        self::$rules[self::$method][$_param[1]]=[
+                            'type'=>$_param[0],
+                            'name'=>$_param[1],
+                            'desc'=>$_param[2],
+                            'require'=>isset($_param[3])?$_param[3]:'',
+                            'default'=>isset($_param[4])?$_param[4]:'',
+                            'range'=>isset($_param[5])?$_param[5]:''
+                        ];
                     }
 //                    {
 //                        $method = isset($_param[3])?$_param[3]:'';
