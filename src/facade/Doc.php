@@ -111,7 +111,6 @@ abstract class Doc
         }
         //获取请求列表文档
         $methodDoc = self::getMethodListDoc($className);
-
         //模板位置
         $apiInfoHtmlPath = dirname(__FILE__) . DIRECTORY_SEPARATOR. '..' . DIRECTORY_SEPARATOR. 'tpl' . DIRECTORY_SEPARATOR. 'apiInfo.tpl';
         $apiInfoHtmlPath = (Config::get('apiInfoHtmlPath')) ? Config::get('apiInfoHtmlPath') : $apiInfoHtmlPath;
@@ -166,19 +165,16 @@ abstract class Doc
         $rules = $className::getRules();
         //$restMethodList = self::getRestMethodList($className);
         $restMethodList = self::_execExtraAction($className);
-
+        $methodDoc = [];
         foreach ($restMethodList as $method) {
             if(strtolower($method) == 'jwt'){
                 continue;
             }
             $rc = new \ReflectionClass($className);
-
             if (false == $rc->hasMethod($method)) continue;
             $reflection = new \ReflectionMethod($className, $method);
             $docComment = $reflection->getDocComment();
-            //获取title,desc,readme,return等说明
             $methodDoc[$method] = self::getDoc($docComment);
-
             if (isset($rules[$method])) {
                 $rules['all'] = (isset($rules['all'])) ? $rules['all'] : [];
                 $methodDoc[$method]['rules'] = array_merge($rules['all'], $rules[$method]);
@@ -191,7 +187,7 @@ abstract class Doc
                 }
             }
         }
-        //p($methodDoc);die;
+//        p($methodDoc);die;
         return $methodDoc;
     }
 
@@ -222,25 +218,21 @@ abstract class Doc
     private static  function _execExtraAction($className){
         $reflection = new \ReflectionClass($className);
         $metnods = get_class_methods($className);
-
         $Properties = $reflection->getDefaultProperties();
         $restMethodList = $Properties['restActionList'];
-        $extraActionList = $Properties['extraActionList'];
-
-        foreach ($metnods as $k=>$v){
-            if(in_array($v,$restMethodList)){
-                continue;
-            }
-            if(in_array($v,$extraActionList)){
-                continue;
-            }
-            if(strpos($v,'_')===false
+        $skipAuthActionList = $Properties['skipAuthActionList'];
+        $s1 = '__';
+        $s2 = '_';
+        foreach ($metnods as $k => $v){
+            if(substr($v, 0, strlen($s1)) !== $s1
+                && substr($v, 0, strlen($s2)) !== $s2
                 && strpos($v,'set')===false
                 && strpos($v,'get')===false
                 && $v!='sendError'
                 && $v!='sendSuccess'
                 && $v!='sendRedirect'
                 && $v!='response'
+                && $v!='jwt'
             ){
                 array_push($restMethodList,humpToLine($v));
             }
@@ -431,6 +423,7 @@ abstract class Doc
         $data['param'] = (isset($data['param'])) ? $data['param'] : '';
         $data['route'] = (isset($data['route'])) ? $data['route'] : '';
         $data['host'] = request()->Domain();
+//        p($data);die;
         return $data;
     }
 

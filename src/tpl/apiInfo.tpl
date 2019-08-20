@@ -361,7 +361,7 @@
         //获取class md
         $.get("__ROOT__{$classDoc.readme}", function (markdown) {
             editormd.markdownToHTML("markdown-class", {
-                markdown: markdown,//+ "\r\n" + $("#append-test").text(),
+                markdown: markdown || '{$classDoc.readme}',//+ "\r\n" + $("#append-test").text(),
                 //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
                 htmlDecode: "style,script,iframe",  // you can filter tags decode
                 //toc             : false,
