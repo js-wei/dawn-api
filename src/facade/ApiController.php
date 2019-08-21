@@ -96,7 +96,7 @@ abstract class ApiController
         $ext = Request::ext();
         $this->className = $request->controller();
         //p($request);die;
-        if ('' == $ext) {
+        if ($ext) {
             // 自动检测资源类型
             $this->type = $request->type();
         } elseif (!preg_match('/\(' . $this->restTypeList . '\)$/i', $ext)) {
@@ -130,13 +130,17 @@ abstract class ApiController
             if(in_array($v,$this->extraActionList)){
                 continue;
             }
-            if(strpos($v,'_')===false
+            $s1 = '__';
+            $s2 = '_';
+            if(substr($v, 0, strlen($s1)) !== $s1
+                && substr($v, 0, strlen($s2)) !== $s2
                 && strpos($v,'set')===false
                 && strpos($v,'get')===false
                 && $v!='sendError'
                 && $v!='sendSuccess'
                 && $v!='sendRedirect'
                 && $v!='response'
+                && $v!='jwt'
             ){
                 array_push($this->extraActionList,humpToLine($v));
                 //$this->_getDocComment($v);
