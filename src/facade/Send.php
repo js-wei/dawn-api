@@ -35,7 +35,7 @@ trait Send
      * @param array $options
      * @return Response|\think\response\Json|\think\response\Jsonp|Redirect|\think\response\View|\think\response\Xml
      */
-    public function sendError($status = 400, $message = 'error', $code = 400, $data = [], $headers = [], $options = [])
+    public function sendError($status = 400, $message = 'error', $code = 200, $data = [], $headers = [], $options = [])
     {
         $responseData['status'] = (int)$status;
         $responseData['message'] = (string)$message;
