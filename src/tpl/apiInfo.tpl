@@ -14,6 +14,9 @@
     <link href="__STATIC__/hadmin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
     <link href="__STATIC__/hadmin/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
     <link href="__STATIC__/hadmin/css/animate.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="http://static.3qiy.com/layui/css/layui.css">
+     <script src="http://static.3qiy.com/layui/layui.js"></script>-->
+    <link rel="stylesheet" href="http://static.3qiy.com/jsonview/dist/jquery.jsonview.css">
     <!--markdown-->
     <link rel="stylesheet" href="__STATIC__/hadmin/css/plugins/editormd/editormd.preview.css"/>
     <!--markdown-->
@@ -173,7 +176,9 @@
                                             <label class="label label-primary pull-right">{$vo.route}</label>
                                         {/notempty}
                                     </h5>
-
+                                    <div class="pull-right" style="margin-top:-6px;margin-right: 50px;">
+                                        <button class="btn btn-danger test-api" data-role="{$vo|json_encode}">接口测试</button>
+                                    </div>
                                 </div>
                                 <!--title,desc-->
                                 {notempty  name="vo.desc"}
@@ -379,7 +384,6 @@
         });
         var parent = $('li.active').parents('ul');
         parent.addClass('in');
-
     });
 </script>
 {foreach name="methodDoc" item="vo" key="k" }
@@ -465,6 +469,12 @@
     .scrollTop i:hover{
         color: rgba(0,0,0,.8);
     }
+    .margin-top-10{
+        margin-top: 10px;
+    }
+    .input-group-addon{
+        min-width: 150px;
+    }
 </style>
 <!-- 自定义js -->
 <script src="__STATIC__/hadmin/js/hAdmin.js?v=4.1.0"></script>
@@ -472,6 +482,7 @@
 
 <!-- 第三方插件 -->
 <script src="__STATIC__/hadmin/js/plugins/pace/pace.min.js"></script>
+<script src="http://static.3qiy.com/jsonview/dist/jquery.jsonview.js"></script>
 <script>
     $(function () {
         $('.wrapper').scroll(function () {
@@ -488,6 +499,56 @@
             e.preventDefault();
             go($(this).attr('href'));
             //return false;
+        });
+        $(document).on('click','.test-api',function () {
+            var _data = $(this).attr('data-role'),
+                data = JSON.parse(_data);
+            var path = data.route ? data.route.split(':') : '';
+            var obj = data.rules
+            var b = $.isEmptyObject(obj);
+            if(!b){
+                var _html = '';
+                for(let key  in obj){
+                    const tmp = obj[key]
+                    const placeholder = tmp.range?tmp.range:tmp.desc
+                    if(tmp.name === 'file'){
+                        _html += `<div class="input-group margin-top-10">
+              <span class="input-group-addon" id="basic-addon1">参数：${tmp.name}(file)：</span>
+              <input type="file" class="form-control" name="${tmp.default}">
+            </div>`
+                    }else{
+                        _html += `<div class="input-group margin-top-10">
+              <span class="input-group-addon" id="basic-addon1">参数：${tmp.name}(${tmp.type})：</span>
+              <input type="text" class="form-control" name="${tmp.name}" value="${tmp.default}" placeholder="${placeholder}">
+            </div>`
+                    }
+                }
+            }else{
+                _html = '不需要参数'
+            }
+            var html = `<h4>请求地址：${data.host}${path[0]}<button class="btn btn-info" id="request-api">发送请求</button></h4>
+<h4>请求方式：${path[1]}</h4>
+<h4>请求参数：</h4>
+<from id="formData">
+${_html}
+</form>
+<h4>返回结果：</h4>
+<div class="json-view">
+无
+</div>`;
+            layer.open({
+                title: '接口测试',
+                content: html,
+                area: ['650px', '520px'],
+                btn: ''
+            });
+        });
+
+        $(document).on('click','#request-api',function () {
+            const data = { name: 'jswei', sex: '男'}
+            const html = $('#formData').serialize()
+            console.log(html)
+            // $('.json-view').JSONView(data,{collapsed: true});
         });
     });
     go=function(index){

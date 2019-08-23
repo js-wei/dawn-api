@@ -22,6 +22,8 @@
     <link href="__STATIC__/hadmin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="__STATIC__/hadmin/css/animate.css" rel="stylesheet">
     <link href="__STATIC__/hadmin/css/style.css?v=4.1.0" rel="stylesheet">
+    <!--<link rel="stylesheet" href="http://static.3qiy.com/layui/css/layui.css">
+    <script src="http://static.3qiy.com/layui/layui.js"></script>-->
 </head>
 
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
