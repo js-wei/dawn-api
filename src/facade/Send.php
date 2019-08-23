@@ -35,14 +35,18 @@ trait Send
      * @param array $options
      * @return Response|\think\response\Json|\think\response\Jsonp|Redirect|\think\response\View|\think\response\Xml
      */
-    public function sendError($status = 400, $message = 'error', $code = 200, $data = [], $headers = [], $options = [])
+    public function sendError($status = 0, $message = 'error', $code = 200, $data = [], $headers = [], $options = [])
     {
-        $responseData['status'] = (int)$status;
+        $responseData['status'] = $status?(int)$status:0;
         $responseData['message'] = (string)$message;
-        if (!empty($data)){
+        if (!empty($data) && is_array($data)) {
             $responseData['data'] = $data;
-            $responseData = array_merge($responseData, $options);
+        }elseif (!empty($data) && is_object($data)){
+            $responseData = $data->toArray();
+        }else{
+            $responseData['data'] = $data;
         }
+        $responseData = array_merge($responseData, $options);
         return $this->response($responseData, $code, $headers,$options);
     }
 
@@ -55,11 +59,16 @@ trait Send
      * @param array $options
      * @return Response|\think\response\Json|\think\response\Jsonp|Redirect|\think\response\Xml
      */
-    public function sendSuccess($data = [], $message = 'success', $code = 200, $headers = [], $options = [])
-    {
+    public function sendSuccess($data = [], $message = 'success', $code = 200, $headers = [], $options = []){
         $responseData['status'] = 1;
         $responseData['message'] = (string)$message;
-        if (!empty($data)) $responseData = $data;
+        if (!empty($data) && is_array($data)) {
+            $responseData['data'] = $data;
+        }elseif (!empty($data) && is_object($data)){
+            $responseData['data'] = $data->toArray();
+        }else{
+            $responseData['data'] = $data;
+        }
         $responseData = array_merge($responseData, $options);
         return $this->response($responseData, $code, $headers,$options);
     }
