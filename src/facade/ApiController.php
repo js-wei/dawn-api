@@ -170,7 +170,7 @@ abstract class ApiController
             } else {
                 $auth = true;
             }
-            if ($auth !== true) throw new UnauthorizedException();
+            if ($auth !== true) $this->sendError(0, '认证授权失败');
             //执行操作
         } else {
             try {
@@ -182,15 +182,13 @@ abstract class ApiController
                 //认证
                 $auth = (self::_getConfig('api_auth') && $this->apiAuth) ? self::_auth() : true;
                 if ($auth !== true){
-                    $msg =  Config::get('app.lang_switch_on')?lang('unauthorized'):'Unauthorized';
-                    throw new UnauthorizedException($msg);
+                    $this->sendError(0, '认证授权失败');
                 }
             } catch (UnauthorizedException $e) {
                 //授权认证失败
-                throw  new HttpResponseException($this->sendError(401, lang('authentication'), 401, [], $e->getHeaders()));
+                $this->sendError(0, '认证授权失败');
             } catch (Exception $e) {
-                $msg =  Config::get('app.lang_switch_on')?lang('error',[lang('server')]):$e->getMessage();
-                throw  new HttpResponseException($this->sendError(500, $msg, 500));
+                $this->sendError(0, 'token已失效');
             }
         }
     }
@@ -225,18 +223,16 @@ abstract class ApiController
 
     /**
      * 授权验证
-     * @return mixed
-     * @throws Exception
-     * @throws UnauthorizedException
+     * @return \think\response\Json
      */
     private static function _auth(){
         $baseAuth = Factory::getInstance(\DawnApi\auth\BaseAuth::class);
         try {
             return $baseAuth->auth(self::$app['auth']);
         } catch (UnauthorizedException $e) {
-            throw  new UnauthorizedException($e->authenticate, $e->getMessage());
+            return json(['status'=>0, 'massage'=>'授权失败']);
         } catch (Exception $e) {
-            throw  new  Exception(lang('error',[lang('serve'),'']), 500);
+            return json(['status'=>0, 'massage'=>'授权失败']);
         }
     }
 

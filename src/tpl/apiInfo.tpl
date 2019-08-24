@@ -475,6 +475,12 @@
     .input-group-addon{
         min-width: 150px;
     }
+    #loading{
+        font-size: 50px;
+        margin-left: 50px;
+        margin-top: 20px;
+        display: none;
+    }
 </style>
 <!-- 自定义js -->
 <script src="__STATIC__/hadmin/js/hAdmin.js?v=4.1.0"></script>
@@ -484,6 +490,10 @@
 <script src="__STATIC__/hadmin/js/plugins/pace/pace.min.js"></script>
 <script src="http://static.3qiy.com/jsonview/dist/jquery.jsonview.js"></script>
 <script>
+    let _url = '',
+        _method = 'GET',
+        _host = '',
+        _is_params = false
     $(function () {
         $('.wrapper').scroll(function () {
             if($(this).scrollTop()==50){
@@ -507,6 +517,7 @@
             var obj = data.rules
             var b = $.isEmptyObject(obj);
             if(!b){
+                _is_params = true
                 var _html = '';
                 for(let key  in obj){
                     const tmp = obj[key]
@@ -525,16 +536,21 @@
                 }
             }else{
                 _html = '不需要参数'
+                _is_params = false
             }
-            var html = `<h4>请求地址：${data.host}${path[0]}<button class="btn btn-info" id="request-api">发送请求</button></h4>
-<h4>请求方式：${path[1]}</h4>
+            _url = `${data.host}/${path[0]}`
+            _method = `${path[1]}`
+            _host = data.host
+            var html = `<h4>请求地址：<span id="req-url">${data.host}${path[0]}</span>
+            <button class="btn btn-info pull-right" id="request-api">发送请求</button></h4>
+<h4>请求方式：<span class="req-method">${path[1]}</span></h4>
 <h4>请求参数：</h4>
-<from id="formData">
+<form id="formData">
 ${_html}
 </form>
 <h4>返回结果：</h4>
 <div class="json-view">
-无
+<i class="fa fa-spinner fa-pulse" id="loading"></i>
 </div>`;
             layer.open({
                 title: '接口测试',
@@ -545,10 +561,37 @@ ${_html}
         });
 
         $(document).on('click','#request-api',function () {
-            const data = { name: 'jswei', sex: '男'}
-            const html = $('#formData').serialize()
-            console.log(html)
-            // $('.json-view').JSONView(data,{collapsed: true});
+            const formData = new FormData($('#formData')[0])
+            const __key = `${_host}_token`
+            $.ajax({
+                url: _url,
+                type: _method,
+                data: _is_params?formData:[],
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                    const token =localStorage.getItem(__key) || ''
+                    xhr.setRequestHeader("Authorization", 'Bearer ' + token)
+                    $('#loading').show()
+                },
+                success:function (res) {
+                    $('#loading').hide()
+                    if(_url.indexOf('login')>-1){
+                        localStorage.setItem(__key, res.data.access_token)
+                    }
+                    if(_url.indexOf('logout')>-1){
+                        localStorage.setItem(__key, '')
+                    }
+                    if(_url.indexOf('refresh_token')>-1){
+                        localStorage.setItem(__key, res.data.access_token)
+                    }
+                    $('.json-view').JSONView(res, {collapsed: true})
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log('a error: ' +  textStatus)
+                }
+            })
         });
     });
     go=function(index){
