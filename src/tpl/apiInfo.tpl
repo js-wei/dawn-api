@@ -334,7 +334,6 @@
     </div>
     <!--右侧部分结束-->
     <div class="scrollTop">
-        <i class="fa fa-chevron-circle-up"></i>
     </div>
 </div>
 <!-- 全局js -->
@@ -541,7 +540,7 @@
             _url = `${data.host}/${path[0]}`
             _method = `${path[1]}`
             _host = data.host
-            var html = `<h4>请求地址：<span id="req-url">${data.host}${path[0]}</span>
+            var html = `<h4>请求地址：<span id="req-url">${data.host}/${path[0]}</span>
             <button class="btn btn-info pull-right" id="request-api">发送请求</button></h4>
 <h4>请求方式：<span class="req-method">${path[1]}</span></h4>
 <h4>请求参数：</h4>
@@ -550,10 +549,9 @@ ${_html}
 </form>
 <h4>返回结果：</h4>
 <div class="json-view">
-<i class="fa fa-spinner fa-pulse" id="loading"></i>
 </div>`;
             layer.open({
-                title: '接口测试',
+                title: `接口测试---${data.title}`,
                 content: html,
                 area: ['650px', '520px'],
                 btn: ''
@@ -563,20 +561,33 @@ ${_html}
         $(document).on('click','#request-api',function () {
             const formData = new FormData($('#formData')[0])
             const __key = `${_host}_token`
+            let index = 0
+            let data
+            if (_method == 'get'){
+                let _data = new Object();
+                for (var [a, b] of formData.entries()) {
+                    if(b) _data[a] = b
+                }
+                data = $.param(_data)
+            }else{
+                data = formData
+            }
             $.ajax({
                 url: _url,
                 type: _method,
-                data: _is_params?formData:[],
+                data: data,
                 dataType: 'json',
                 processData: false,
                 contentType: false,
                 beforeSend: function(xhr) {
-                    const token =localStorage.getItem(__key) || ''
+                    const token = localStorage.getItem(__key) || ''
                     xhr.setRequestHeader("Authorization", 'Bearer ' + token)
-                    $('#loading').show()
+                    index = layer.load( 2, {
+                        shade: [0.5,'#000']
+                    });
                 },
                 success:function (res) {
-                    $('#loading').hide()
+                    layer.close(index);
                     if(_url.indexOf('login')>-1){
                         localStorage.setItem(__key, res.data.access_token)
                     }
